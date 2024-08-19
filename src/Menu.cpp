@@ -72,6 +72,12 @@ void SpecialFunc::instructions()
     gotoxy(2, 10);
     std::cout << "Type OPTIONS -> to show all verbs." << std::endl;
     gotoxy(2, 11);
+    std::cout << "Type ENTER -> to enter into a building." << std::endl;
+    gotoxy(2, 12);
+    std::cout << "Type LEAVE -> to leave the building." << std::endl;
+    gotoxy(2, 13);
+    std::cout << "Type NEEDMONEY -> a small hack to increase money." << std::endl;
+    gotoxy(2, 14);
     std::cout << "TYPE QUIT -> to quit the game and return to main menu." << std::endl;
 
     gotoxy(2, 26);

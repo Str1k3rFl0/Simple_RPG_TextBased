@@ -10,15 +10,16 @@
 
 #include "Menu.h"
 #include "Player.h"
+#include "Supermarket.h"
 
 enum DIRECTIONS { NORTH, WEST, SOUTH, EAST };
 enum LOCATIONS { CENTRE, BANK, SUPERMARKET, HOSPITAL, HOME, PARK };
-enum VERBS { LOOK, STATS, OPTIONS };
+enum VERBS { LOOK, STATS, OPTIONS, ENTER, LEAVE, NEEDMONEY, INVENTORY };
 
 const int NONE { -1 };
 const int DIRS { 4 };
 const int LOCS { 6 };
-const int VERB { 3 };
+const int VERB { 7 };
 
 class Map
 {
@@ -41,6 +42,9 @@ public:
     int location{};
 
     Player pl{};
+    Supermarket sm{};
+
+    bool isInsideBuilding { false };
 
 public:
     void setLocations();
@@ -50,6 +54,15 @@ public:
     void lookAround();
     bool parser(const std::string& wd1, const std::string& wd2, Player& pl);
     void showOptions();
+    void enterBuilding();
+    void leaveBuilding();
+
+    void superMarketMenu(Player& pl);
+
+    void showInventoryCommand(Player& pl)
+    {
+        pl.showInventory();
+    }
 
 public:
     Map() : location { CENTRE }

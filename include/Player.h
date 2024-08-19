@@ -7,6 +7,7 @@
 #include <fstream>
 #include <conio.h>
 #include <string>
+#include <map>
 
 class Player
 {
@@ -16,11 +17,16 @@ private:
     std::string _sex{};
     std::string _occupation{ "None" };
     std::string _password{};
-    static inline int money { 100 };
+    int money { 100 };
+
+    std::map<std::string, int> inventory{};
 
 public:
+    Player() = default;
+
     void setName(const std::string& name) { _name = name; }
     void setPassword(const std::string& pass) { _password = pass; }
+    void setMoney(int amount) { money = amount; }
 
     void enterName();
     void enterAge();
@@ -32,7 +38,7 @@ public:
     const std::string& getSex() const;
     const std::string& getPassword() const;
 
-    static int getMoney() { return money; }
+    int getMoney() { return money; }
 
     void createAccount(const char* fileName);
     bool showAccount(const char* fileName);
@@ -42,6 +48,20 @@ public:
     bool deleteAccount(const char* fileName);
     bool loadAccount(const char* fileName,
         const std::string& name, const std::string& password);
+    bool updateFile(const char* fileName);
+
+    void addItem(const std::string& item, int quantity);
+    void saveInventory() const;
+    void loadInventory();
+    void showInventory() const;
+    void initInventory();
+    std::string getInvFileName() const { return _name + "_inventory.txt"; }
+
+    // JUST FOR TEST
+    bool increaseMoney(int amount)
+    {
+        if (money >= amount) { money += amount; return true; } return false;
+    }
 
     void showStats(const char* fileName) const;
 };

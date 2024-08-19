@@ -264,6 +264,54 @@ void Player::modifyAccount(const char* fileName)
     _getch();
 }
 
+bool Player::loadAccount(const char* fileName,
+        const std::string& name, const std::string& password)
+{
+    system("cls");
+
+    std::ifstream myFile(fileName, std::ios::in);
+    if (!myFile.is_open())
+    {
+        std::cerr << "The file can't be opened!";
+        return false;
+    }
+
+    std::string line{};
+    while (std::getline(myFile, line))
+    {
+        std::istringstream iss { line };
+        std::string fName{};
+        std::string fAge{};
+        std::string fSex{};
+        std::string fOccupation{};
+        std::string fPassword{};
+        int fMoney{};
+
+        if (iss >> fName >> fAge >> fSex >> fOccupation >> fPassword >> fMoney)
+        {
+            if (name == fName && password == fPassword)
+            {
+                std::cout << "Account loaded successfully.\n";
+                _name = fName;
+                _age = fAge;
+                _sex = fSex;
+                _occupation = fOccupation;
+                _password = fPassword;
+                money = fMoney;
+
+                loadInventory();
+
+                myFile.close();
+                return true;
+            }
+        }
+    }
+
+    std::cout << "Account not found or password incorrect.\n";
+    myFile.close();
+    return false;
+}
+
 bool Player::deleteAccount(const char* fileName)
 {
     system("cls");
@@ -357,19 +405,18 @@ bool Player::deleteAccount(const char* fileName)
     }
 }
 
-bool Player::loadAccount(const char* fileName,
-        const std::string& name, const std::string& password)
+bool Player::updateFile(const char* fileName)
 {
-    system("cls");
+    std::ifstream myFile(fileName);
+    std::ofstream tempFile("Temp.txt");
+    std::string line{};
 
-    std::ifstream myFile(fileName, std::ios::in);
     if (!myFile.is_open())
     {
-        std::cerr << "The file can't be opened!";
+        std::cerr << "Error opening file.\n";
         return false;
     }
 
-    std::string line{};
     while (std::getline(myFile, line))
     {
         std::istringstream iss { line };
@@ -382,24 +429,27 @@ bool Player::loadAccount(const char* fileName,
 
         if (iss >> fName >> fAge >> fSex >> fOccupation >> fPassword >> fMoney)
         {
-            if (name == fName && password == fPassword)
+            if (_name == fName && _password == fPassword)
             {
-                std::cout << "Account loaded successfully.\n";
-                _name = fName;
-                _age = fAge;
-                _sex = fSex;
-                _occupation = fOccupation;
-                _password = fPassword;
-                money = fMoney;
-                myFile.close();
-                return true;
+                fMoney = money;
+                line = fName + " " + fAge + " " + fSex + " " + fOccupation + " " + fPassword + " " + std::to_string(fMoney);
             }
         }
+        tempFile << line << std::endl;
     }
 
-    std::cout << "Account not found or password incorrect.\n";
     myFile.close();
-    return false;
+    tempFile.close();
+
+    if (remove(fileName) != 0 || rename("Temp.txt", fileName) != 0)
+    {
+        std::cerr << "Error updating file.\n";
+        return false;
+    }
+
+    saveInventory();
+
+    return true;
 }
 
 void Player::showStats(const char* fileName) const
@@ -440,4 +490,69 @@ void Player::showStats(const char* fileName) const
 
     std::cout << "Account not found or password incorrect.\n";
     myFile.close();
+}
+
+void Player::addItem(const std::string& item, int quantity)
+{
+    inventory[item] += quantity;
+    saveInventory();
+}
+
+void Player::saveInventory() const
+{
+    std::ofstream invFile(getInvFileName(), std::ios::out);
+
+    if (invFile.is_open())
+    {
+        for (const auto& pair : inventory)
+        {
+            invFile << pair.first << ' ' << pair.second << '\n';
+        }
+        invFile.close();
+    }
+    else
+    {
+        std::cerr << "Unable to open inventory file for saving!";
+    }
+}
+
+void Player::loadInventory()
+{
+    std::ifstream invFile(getInvFileName(), std::ios::in);
+
+    if (invFile.is_open())
+    {
+        std::string item;
+        int quantity;
+        while (invFile >> item >> quantity)
+        {
+            inventory[item] = quantity;
+        }
+        invFile.close();
+    }
+    else
+    {
+        std::cerr << "Unable to open inventory file for loading!";
+    }
+}
+
+void Player::showInventory() const
+{
+    std::cout << "Inventory for " << _name << ":\n";
+    if (inventory.empty())
+    {
+        std::cout << "Inventory is empty.\n";
+    }
+    else
+    {
+        for (const auto& pair : inventory)
+        {
+            std::cout << pair.first << ": " << pair.second << '\n';
+        }
+    }
+}
+
+void Player::initInventory()
+{
+    loadInventory();
 }

@@ -64,91 +64,86 @@ void Map::setVerbs()
 
     verbs[OPTIONS].word = "OPTIONS";
     verbs[OPTIONS].code = OPTIONS;
+
+    verbs[ENTER].word = "ENTER";
+    verbs[ENTER].code = ENTER;
+
+    verbs[LEAVE].word = "LEAVE";
+    verbs[LEAVE].code = LEAVE;
+
+    verbs[NEEDMONEY].word = "NEEDMONEY";
+    verbs[NEEDMONEY].code = NEEDMONEY;
+
+    verbs[INVENTORY].word = "INVENTORY";
+    verbs[INVENTORY].code = INVENTORY;
 }
 
 void Map::showOptions()
 {
-    std::cout << "Type NORTH -> to move to the North" << std::endl;
-    std::cout << "Type SOUTH -> to move to the South" << std::endl;
-    std::cout << "Type WEST -> to move to the West" << std::endl;
-    std::cout << "Type EAST -> to move to the East" << std::endl;
+    std::cout << "Type NORTH -> to move to the North." << std::endl;
+    std::cout << "Type SOUTH -> to move to the South." << std::endl;
+    std::cout << "Type WEST -> to move to the West." << std::endl;
+    std::cout << "Type EAST -> to move to the East." << std::endl;
     std::cout << "Type LOOK -> to know what locations are around you." << std::endl;
     std::cout << "Type STATS -> to show player stats." << std::endl;
     std::cout << "Type OPTIONS -> to show all verbs." << std::endl;
+    std::cout << "Type ENTER -> to enter into a building." << std::endl;
+    std::cout << "Type LEAVE -> to leave the building." << std::endl;
+    std::cout << "Type NEEDMONEY -> a small hack to increase money." << std::endl;
     std::cout << "TYPE QUIT -> to quit the game and return to main menu." << std::endl;
+}
+
+void Map::enterBuilding()
+{
+    switch (location)
+    {
+        case SUPERMARKET:
+            isInsideBuilding = true;
+            std::cout << "Entering supermarket...\n";
+            superMarketMenu(pl);
+            break;
+
+        default: std::cout << "There is no building to enter here." << std::endl;
+                 break;
+    }
+}
+
+void Map::leaveBuilding()
+{
+    if (isInsideBuilding)
+    {
+        isInsideBuilding = false;
+        std::cout << "You have left the building and returned to the outside.\n";
+        std::cout << "You are now in " << locs[location].description << ".\n";
+    }
+    else
+    {
+        std::cout << "You are not inside a building to leave.\n";
+    }
+}
+
+void Map::superMarketMenu(Player& pl)
+{
+    bool running { true };
+    while (running)
+    {
+        std::cout << "You are in the supermarket.\n";
+        std::cout << "1. Buy product\n";
+        std::cout << "2. Leave supermarket\n";
+        std::cout << "Enter you choice: ";
+        char ch{};
+        std::cin >> ch;
+        switch (ch)
+        {
+            case '1': sm.buyProduct(pl); break;
+            case '2': running = false; break;
+            default: std::cout << "Invalid choice!\n"; break;
+        }
+    }
 }
 
 void Map::sectionCommand(std::string& cmd, std::string& wd1, std::string& wd2)
 {
-    /*
-    std::string subStr{};
-    std::vector<std::string> words{};
-    char search { ' ' };
-
-    // Split command into vector
-    for (std::size_t i { 0 }; i < cmd.size(); i++)
-    {
-        if (cmd.at(i) != search)
-        {
-            subStr.insert(subStr.end(), cmd.at(i));
-        }
-
-        if (i == cmd.size() - 1)
-        {
-            words.push_back(subStr);
-            subStr.clear();
-        }
-
-        if (cmd.at(i) == search)
-        {
-            words.push_back(subStr);
-            subStr.clear();
-        }
-    }
-
-    // Clear out any blanks
-    for (std::size_t i = words.size() - 1; i > 0; i--)
-    {
-        if (words.at(i) == "")
-        {
-            words.erase(words.begin() + i);
-        }
-    }
-
-    // Make words upper case
-    for (std::size_t i { 0 }; i < words.size(); i++)
-    {
-        for (std::size_t j { 0 }; j < words.at(i).size(); j++)
-        {
-            if (islower(words.at(i).at(j)))
-            {
-                words.at(i).at(j) = toupper(words.at(i).at(j));
-            }
-        }
-    }
-
-    if (words.size() == 0)
-    {
-        std::cout << "No command given." << '\n';
-    }
-
-    if (words.size() == 1)
-    {
-        wd1 = words.at(0);
-    }
-
-    if (words.size() == 2)
-    {
-        wd1 = words.at(0);
-        wd2 = words.at(1);
-    }
-
-    if (words.size() > 2)
-    {
-        std::cout << "Command too long. Only type one or two words (direction or verb and noun)" << '\n';
-    }
-    */
-
     std::vector<std::string> words{};
     std::string subStr{};
 
@@ -256,6 +251,38 @@ bool Map::parser(const std::string& wd1, const std::string& wd2, Player& pl)
                 showOptions();
                 return true;
             }
+            else if (verbs[i].code == ENTER)
+            {
+                enterBuilding();
+                return true;
+            }
+            else if (verbs[i].code == LEAVE)
+            {
+                leaveBuilding();
+                return true;
+            }
+            else if (verbs[i].code == NEEDMONEY)
+            {
+                if (pl.increaseMoney(15))
+                {
+                    std::cout << "\nYou received 15 coins. Your new total is: " << pl.getMoney() << '\n';
+                    if (pl.updateFile("player.txt"))
+                    {
+                        std::cout << "Account updated successfully.\n";
+                    }
+                }
+                else
+                {
+                    std::cout << "Failed to increase money.\n";
+                }
+                return true;
+            }
+            else if (verbs[i].code == INVENTORY)
+            {
+                showInventoryCommand(pl);
+                return true;
+            }
+
             std::cout << "Verb not implemented." << '\n';
             return true;
         }
@@ -267,72 +294,48 @@ bool Map::parser(const std::string& wd1, const std::string& wd2, Player& pl)
 
 void Map::playGame()
 {
-    Menu menu{};
-    Player pl{};
-    const char* fileName { "Player.txt" };
-    bool authenticated { false };
+    std::string name;
+    std::string password;
 
-    /*
-    while (!authenticated)
+    std::cout << "Enter your name: ";
+    std::cin >> name;
+    std::cout << "Enter your password: ";
+    std::cin >> password;
+
+    if (!pl.loadAccount("Player.txt", name, password))
     {
-        std::cout << "Please log in to start the game.\n";
-        authenticated = pl.authenticate(fileName);
-        if (!authenticated)
-        {
-            std::cout << "Failed to log in. Please try again.\n";
-            std::cout << "Press ENTER...\n";
-            _getch();
-        }
+        std::cerr << "Failed to load account. Exiting game.\n";
+        return;
     }
-    */
 
-    std::string name{};
-    std::string password{};
-    while (!authenticated)
+    //pl.initInventory();
+
+    std::cout << "Welcome, " << pl.getName() << "!\n\n";
+
+    bool running = true;
+    while (running)
     {
-        std::cout << "Enter your name: ";
-        std::cin >> name;
-        std::cout << "Enter your password: ";
-        std::cin >> password;
+        std::cout << "\nEnter a command: ";
+        std::string cmd;
+        std::getline(std::cin, cmd);
 
-        if (pl.loadAccount(fileName, name, password))
+        std::string wd1, wd2;
+        sectionCommand(cmd, wd1, wd2);
+
+        if (wd1 == "QUIT")
         {
-            std::cout << "Welcome, " << pl.getName() << "!\n";
-            std::cout << "Press ENTER to continue...";
-            _getch();
-            authenticated = true;
+            running = false;
+            std::cout << "Exiting the game. GoodBye!\n";
         }
         else
         {
-            std::cout << "Incorrect name or password. Please try again!\n";
+            if (!parser(wd1, wd2, pl))
+            {
+                std::cout << "Invalid command. Type 'OPTIONS' to see available commands.\n";
+            }
         }
     }
-    system("cls");
 
-    pl.setName(name);
-    pl.setPassword(password);
-
-    std::string command{};
-    std::string word1{};
-    std::string word2{};
-
-    while (word1 != "QUIT")
-    {
-        command.clear();
-        std::cout << "What should I do? :: ";
-        std::getline(std::cin, command);
-        std::cout << "\nYour raw command was " << command << '\n';
-        word1.clear();
-        word2.clear();
-        sectionCommand(command, word1, word2);
-
-        if (word1 != "QUIT")
-        {
-            parser(word1, word2, pl);
-        }
-        else
-        {
-            menu.mainMenu();
-        }
-    }
+    pl.saveInventory();
+    std::cout << '\n';
 }
