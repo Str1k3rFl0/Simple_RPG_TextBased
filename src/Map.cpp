@@ -90,6 +90,7 @@ void Map::showOptions()
     std::cout << "Type ENTER -> to enter into a building." << std::endl;
     std::cout << "Type LEAVE -> to leave the building." << std::endl;
     std::cout << "Type NEEDMONEY -> a small hack to increase money." << std::endl;
+    std::cout << "Type INVENTORY -> show the player's inventory." << std::endl;
     std::cout << "TYPE QUIT -> to quit the game and return to main menu." << std::endl;
 }
 
