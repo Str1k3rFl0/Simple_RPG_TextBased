@@ -532,7 +532,7 @@ void Player::loadInventory()
     }
     else
     {
-        std::cerr << "Unable to open inventory file for loading!";
+        std::cerr << "Unable to open inventory file for loading!\n";
     }
 }
 

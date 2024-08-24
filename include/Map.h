@@ -11,15 +11,16 @@
 #include "Menu.h"
 #include "Player.h"
 #include "Supermarket.h"
+#include "Casino.h"
 
 enum DIRECTIONS { NORTH, WEST, SOUTH, EAST };
-enum LOCATIONS { CENTRE, BANK, SUPERMARKET, HOSPITAL, HOME, PARK };
-enum VERBS { LOOK, STATS, OPTIONS, ENTER, LEAVE, NEEDMONEY, INVENTORY };
+enum LOCATIONS { CENTRE, BANK, SUPERMARKET, HOSPITAL, HOME, PARK, CASINO };
+enum VERBS { LOOK, STATS, OPTIONS, ENTER, LEAVE, NEEDMONEY, INVENTORY, CLEAR };
 
 const int NONE { -1 };
 const int DIRS { 4 };
-const int LOCS { 6 };
-const int VERB { 7 };
+const int LOCS { 7 };
+const int VERB { 8 };
 
 class Map
 {
@@ -43,6 +44,7 @@ public:
 
     Player pl{};
     Supermarket sm{};
+    Casino cas { pl.getMoney() };
 
     bool isInsideBuilding { false };
 
@@ -58,6 +60,7 @@ public:
     void leaveBuilding();
 
     void superMarketMenu(Player& pl);
+    void casinoMenu(Player& pl);
 
     void showInventoryCommand(Player& pl)
     {

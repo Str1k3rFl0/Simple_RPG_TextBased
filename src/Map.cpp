@@ -24,7 +24,7 @@ void Map::setLocations()
     locs[PARK].exits_to_loc[NORTH] = CENTRE;
     locs[PARK].exits_to_loc[WEST] = NONE;
     locs[PARK].exits_to_loc[SOUTH] = SUPERMARKET;
-    locs[PARK].exits_to_loc[EAST] = NONE;
+    locs[PARK].exits_to_loc[EAST] = CASINO;
 
     locs[SUPERMARKET].description.assign("SuperMarket");
     locs[SUPERMARKET].exits_to_loc[NORTH] = PARK;
@@ -37,6 +37,12 @@ void Map::setLocations()
     locs[HOSPITAL].exits_to_loc[WEST] = CENTRE;
     locs[HOSPITAL].exits_to_loc[SOUTH] = NONE;
     locs[HOSPITAL].exits_to_loc[EAST] = NONE;
+
+    locs[CASINO].description.assign("Casino");
+    locs[CASINO].exits_to_loc[NORTH] = NONE;
+    locs[CASINO].exits_to_loc[WEST] = PARK;
+    locs[CASINO].exits_to_loc[SOUTH] = NONE;
+    locs[CASINO].exits_to_loc[EAST] = NONE;
 }
 
 void Map::setDirections()
@@ -76,6 +82,9 @@ void Map::setVerbs()
 
     verbs[INVENTORY].word = "INVENTORY";
     verbs[INVENTORY].code = INVENTORY;
+
+    verbs[CLEAR].word = "CLEAR";
+    verbs[CLEAR].code = CLEAR;
 }
 
 void Map::showOptions()
@@ -91,6 +100,7 @@ void Map::showOptions()
     std::cout << "Type LEAVE -> to leave the building." << std::endl;
     std::cout << "Type NEEDMONEY -> a small hack to increase money." << std::endl;
     std::cout << "Type INVENTORY -> show the player's inventory." << std::endl;
+    std::cout << "Type CLEAR -> to clear the window." << std::endl;
     std::cout << "TYPE QUIT -> to quit the game and return to main menu." << std::endl;
 }
 
@@ -100,9 +110,26 @@ void Map::enterBuilding()
     {
         case SUPERMARKET:
             isInsideBuilding = true;
-            std::cout << "Entering supermarket...\n";
+            std::cout << "\nEntering supermarket...\n";
             superMarketMenu(pl);
             break;
+
+        case CASINO:
+            {
+                if (std::stoi(pl.getAge()) >= 18)
+                {
+                    isInsideBuilding = true;
+                    std::cout << "\nEntering casino...\n";
+                    cas.setTotalMoney(pl.getMoney());
+                    casinoMenu(pl);
+                    break;
+                }
+                else
+                {
+                    std::cout << "You need to have over or equal 18 years old\n";
+                    break;
+                }
+            }
 
         default: std::cout << "There is no building to enter here." << std::endl;
                  break;
@@ -131,12 +158,36 @@ void Map::superMarketMenu(Player& pl)
         std::cout << "You are in the supermarket.\n";
         std::cout << "1. Buy product\n";
         std::cout << "2. Leave supermarket\n";
-        std::cout << "Enter you choice: ";
+        std::cout << "Enter your choice: ";
         char ch{};
         std::cin >> ch;
         switch (ch)
         {
             case '1': sm.buyProduct(pl); break;
+            case '2': running = false; break;
+            default: std::cout << "Invalid choice!\n"; break;
+        }
+    }
+}
+
+void Map::casinoMenu(Player& pl)
+{
+    bool running { true };
+    while (running)
+    {
+        std::cout << "You are in the casino.\n";
+        std::cout << "1. Games\n";
+        std::cout << "2. Leave casino\n";
+        std::cout << "Enter your choice: ";
+        char ch{};
+        std::cin >> ch;
+        switch (ch)
+        {
+            case '1': cas.startGame();
+                      pl.setMoney(cas.getTotalMoney());
+                      pl.updateMoneyInFile("Player.txt");
+                      break;
+
             case '2': running = false; break;
             default: std::cout << "Invalid choice!\n"; break;
         }
@@ -283,6 +334,10 @@ bool Map::parser(const std::string& wd1, const std::string& wd2, Player& pl)
                 showInventoryCommand(pl);
                 return true;
             }
+            else if  (verbs[i].code == CLEAR)
+            {
+                system("cls");
+            }
 
             std::cout << "Verb not implemented." << '\n';
             return true;
@@ -308,8 +363,6 @@ void Map::playGame()
         std::cerr << "Failed to load account. Exiting game.\n";
         return;
     }
-
-    //pl.initInventory();
 
     std::cout << "Welcome, " << pl.getName() << "!\n\n";
 

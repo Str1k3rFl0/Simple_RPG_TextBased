@@ -57,6 +57,8 @@ public:
     void initInventory();
     std::string getInvFileName() const { return _name + "_inventory.txt"; }
 
+    void updateMoneyInFile(const char* fileName) { updateFile(fileName); }
+
     // JUST FOR TEST
     bool increaseMoney(int amount)
     {

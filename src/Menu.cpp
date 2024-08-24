@@ -80,6 +80,8 @@ void SpecialFunc::instructions()
     gotoxy(2, 14);
     std::cout << "Type INVENTORY -> show the player's inventory." << std::endl;
     gotoxy(2, 15);
+    std::cout << "Type CLEAR -> to clear the window." << std::endl;
+    gotoxy(2, 16);
     std::cout << "TYPE QUIT -> to quit the game and return to main menu." << std::endl;
 
     gotoxy(2, 26);

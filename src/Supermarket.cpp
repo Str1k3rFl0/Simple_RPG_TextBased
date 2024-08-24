@@ -4,9 +4,15 @@ Supermarket::Supermarket()
 {
     products[1] = { "Bread", 2 };
     products[2] = { "Milk", 5 };
+    products[3] = { "Yogurt", 2 };
+    products[4] = { "Apple", 1 };
+    products[5] = { "Banana", 1 };
 
     stock[1] = 100;
     stock[2] = 50;
+    stock[3] = 45;
+    stock[4] = 70;
+    stock[5] = 60;
 
     loadStock();
 }
