@@ -2,24 +2,34 @@ Simple RPG Text Based !! This project is still in working and is just a demo !!
 
 Version 10.0.1.0:
   - Player menu:
-    1. Create account
-    2. Show account details
-    3. Modify player account
-    4. Delete account
+    + Create account
+    + Show account details
+    + Modify player account
+    + Delete account
 
   - Game:
-    1. The map with 6 locations
-    2. Movement commands
-    3. Command like: LOOK, STATS and OPTIONS
+    + The map with 6 locations
+    + Movement commands
+    + Command like: LOOK, STATS and OPTIONS
 
 
 Version 10.0.1.1:
   - Game:
-      1. You can enter and leave the building using commands ENTER and LEAVE
-      2. A small hack for increase money: NEEDMONEY
-      3. A new building, Supermarket, where the player can buy products
-      4. A new command for showing inventory: INVENTORY
+      + You can enter and leave the building using commands ENTER and LEAVE
+      + A small hack for increase money: NEEDMONEY
+      + A new building, Supermarket, where the player can buy products
+      + A new command for showing inventory: INVENTORY
 
-![capcap2](https://github.com/user-attachments/assets/6a0d8977-8cd4-487b-9427-f72fb39d5606)
+   
+Version 10.0.1.2:
+  - Game:
+      + A new building, Casino, which have 12 mini-games to play and win prizes
+      + 3 new products for Supermarket
+      + A new command, CLEAR, if you want to clear window
 
-![jocjoc](https://github.com/user-attachments/assets/2cc1f2ba-a18e-47d5-abcc-e5ff6cdc4c99)
+
+![instructions](https://github.com/user-attachments/assets/2f64bb32-c049-4113-b81a-ab5bfe27e991)
+
+![casinoGames](https://github.com/user-attachments/assets/10b89eb5-693b-4971-9c4b-c9b4125a1bae)
+
+![Map](https://github.com/user-attachments/assets/08abdb02-42cd-4151-81a3-13110f2fffaa)
