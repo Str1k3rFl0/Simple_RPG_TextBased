@@ -34,7 +34,7 @@ std::string Bank::genExpDate()
 {
     std::mt19937 mt{static_cast<unsigned long>(std::chrono::high_resolution_clock::now().time_since_epoch().count())};
     std::uniform_int_distribution<int> monthDist{1, 12};
-    std::uniform_int_distribution<int> yearDist{0, 9}; // Generăm ultimele două cifre ale anului
+    std::uniform_int_distribution<int> yearDist{0, 9};
 
     int month { monthDist(mt) };
     int year { 24 + yearDist(mt) };
