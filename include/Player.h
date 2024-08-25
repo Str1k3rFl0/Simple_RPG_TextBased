@@ -56,6 +56,7 @@ public:
     void showInventory() const;
     void initInventory();
     std::string getInvFileName() const { return _name + "_inventory.txt"; }
+    std::string getCardFileName() const { return _name + "_card.txt"; }
 
     void updateMoneyInFile(const char* fileName) { updateFile(fileName); }
 
@@ -66,6 +67,7 @@ public:
     }
 
     void showStats(const char* fileName) const;
+
 };
 
 #endif // PLAYER_H

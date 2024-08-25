@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Supermarket.h"
 #include "Casino.h"
+#include "Bank.h"
 
 enum DIRECTIONS { NORTH, WEST, SOUTH, EAST };
 enum LOCATIONS { CENTRE, BANK, SUPERMARKET, HOSPITAL, HOME, PARK, CASINO };
@@ -45,6 +46,7 @@ public:
     Player pl{};
     Supermarket sm{};
     Casino cas { pl.getMoney() };
+    Bank bank{};
 
     bool isInsideBuilding { false };
 
@@ -61,6 +63,7 @@ public:
 
     void superMarketMenu(Player& pl);
     void casinoMenu(Player& pl);
+    void bankMenu(Player& pl);
 
     void showInventoryCommand(Player& pl)
     {

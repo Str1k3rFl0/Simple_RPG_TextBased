@@ -131,6 +131,11 @@ void Map::enterBuilding()
                 }
             }
 
+        case BANK:
+            isInsideBuilding = true;
+            bankMenu(pl);
+            break;
+
         default: std::cout << "There is no building to enter here." << std::endl;
                  break;
     }
@@ -190,6 +195,34 @@ void Map::casinoMenu(Player& pl)
 
             case '2': running = false; break;
             default: std::cout << "Invalid choice!\n"; break;
+        }
+    }
+}
+
+void Map::bankMenu(Player& pl)
+{
+    system("cls");
+    bool running { true };
+    while (running)
+    {
+        std::cout << "You are in the bank.\n";
+        std::cout << "1. Create Bank Account\n";
+        std::cout << "2. View Bank Account\n";
+        std::cout << "3. Deposit Money\n";
+        std::cout << "4. Withdraw Money\n";
+        std::cout << "5. Leave Bank\n";
+        std::cout << "Enter your choice: ";
+        char ch{};
+        std::cin >> ch;
+
+        switch (ch)
+        {
+            case '1': bank.createCard(pl); break;
+            case '2': bank.showCardInfo(pl); break;
+            case '3': bank.deposit(pl); break;
+            case '4': bank.withdraw(pl); break;
+            case '5': running = false; break;
+            default: std::cout << "Invalid choice. Please try again.\n";
         }
     }
 }
