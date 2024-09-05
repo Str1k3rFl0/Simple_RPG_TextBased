@@ -4,9 +4,9 @@ void Map::setLocations()
 {
     locs[CENTRE].description.assign("Center");
     locs[CENTRE].exits_to_loc[NORTH] = BANK;
-    locs[CENTRE].exits_to_loc[WEST] = HOME;
+    locs[CENTRE].exits_to_loc[WEST] = RESTAURANT;
     locs[CENTRE].exits_to_loc[SOUTH] = PARK;
-    locs[CENTRE].exits_to_loc[EAST] = HOSPITAL;
+    locs[CENTRE].exits_to_loc[EAST] = STADIUM;
 
     locs[BANK].description.assign("Bank");
     locs[BANK].exits_to_loc[NORTH] = NONE;
@@ -14,11 +14,11 @@ void Map::setLocations()
     locs[BANK].exits_to_loc[SOUTH] = CENTRE;
     locs[BANK].exits_to_loc[EAST] = NONE;
 
-    locs[HOME].description.assign("Home");
-    locs[HOME].exits_to_loc[NORTH] = NONE;
-    locs[HOME].exits_to_loc[WEST] = NONE;
-    locs[HOME].exits_to_loc[SOUTH] = NONE;
-    locs[HOME].exits_to_loc[EAST] = CENTRE;
+    locs[RESTAURANT].description.assign("Restaurant");
+    locs[RESTAURANT].exits_to_loc[NORTH] = NONE;
+    locs[RESTAURANT].exits_to_loc[WEST] = NONE;
+    locs[RESTAURANT].exits_to_loc[SOUTH] = NONE;
+    locs[RESTAURANT].exits_to_loc[EAST] = CENTRE;
 
     locs[PARK].description.assign("Park");
     locs[PARK].exits_to_loc[NORTH] = CENTRE;
@@ -32,17 +32,18 @@ void Map::setLocations()
     locs[SUPERMARKET].exits_to_loc[SOUTH] = NONE;
     locs[SUPERMARKET].exits_to_loc[EAST] = NONE;
 
-    locs[HOSPITAL].description.assign("Hospital");
-    locs[HOSPITAL].exits_to_loc[NORTH] = NONE;
-    locs[HOSPITAL].exits_to_loc[WEST] = CENTRE;
-    locs[HOSPITAL].exits_to_loc[SOUTH] = NONE;
-    locs[HOSPITAL].exits_to_loc[EAST] = NONE;
+    locs[STADIUM].description.assign("Stadium");
+    locs[STADIUM].exits_to_loc[NORTH] = NONE;
+    locs[STADIUM].exits_to_loc[WEST] = CENTRE;
+    locs[STADIUM].exits_to_loc[SOUTH] = NONE;
+    locs[STADIUM].exits_to_loc[EAST] = NONE;
 
     locs[CASINO].description.assign("Casino");
     locs[CASINO].exits_to_loc[NORTH] = NONE;
     locs[CASINO].exits_to_loc[WEST] = PARK;
     locs[CASINO].exits_to_loc[SOUTH] = NONE;
     locs[CASINO].exits_to_loc[EAST] = NONE;
+
 }
 
 void Map::setDirections()
@@ -136,6 +137,16 @@ void Map::enterBuilding()
             bankMenu(pl);
             break;
 
+        case STADIUM:
+            isInsideBuilding = true;
+            stadiumMenu(pl);
+            break;
+
+        case RESTAURANT:
+            isInsideBuilding = true;
+            restaurantMenu(pl);
+            break;
+
         default: std::cout << "There is no building to enter here." << std::endl;
                  break;
     }
@@ -221,6 +232,89 @@ void Map::bankMenu(Player& pl)
             case '2': bank.showCardInfo(pl); break;
             case '3': bank.deposit(pl); break;
             case '4': bank.withdraw(pl); break;
+            case '5': running = false; break;
+            default: std::cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
+
+void Map::stadiumMenu(Player& pl)
+{
+    FootballTeam teamA("Team A");
+    teamA.addPlayer(FootballPlayer("Andrew", 25, 10, "Forward"));
+    teamA.addPlayer(FootballPlayer("Tomy", 22, 15, "Midfielder"));
+    teamA.addPlayer(FootballPlayer("Sam", 27, 9, "Defender"));
+    teamA.addPlayer(FootballPlayer("George", 24, 1, "Goalkeeper"));
+    teamA.addPlayer(FootballPlayer("Paul", 29, 2, "Defender"));
+    teamA.addPlayer(FootballPlayer("Luke", 26, 3, "Defender"));
+    teamA.addPlayer(FootballPlayer("Nick", 28, 6, "Midfielder"));
+    teamA.addPlayer(FootballPlayer("Chris", 21, 4, "Defender"));
+    teamA.addPlayer(FootballPlayer("James", 24, 8, "Midfielder"));
+    teamA.addPlayer(FootballPlayer("Michael", 23, 11, "Forward"));
+    teamA.addPlayer(FootballPlayer("David", 30, 7, "Midfielder"));
+
+    FootballTeam teamB("Team B");
+    teamB.addPlayer(FootballPlayer("John", 23, 9, "Forward"));
+    teamB.addPlayer(FootballPlayer("Alex", 26, 8, "Midfielder"));
+    teamB.addPlayer(FootballPlayer("Mark", 29, 2, "Defender"));
+    teamB.addPlayer(FootballPlayer("Steve", 25, 1, "Goalkeeper"));
+    teamB.addPlayer(FootballPlayer("Victor", 27, 3, "Defender"));
+    teamB.addPlayer(FootballPlayer("Philip", 28, 6, "Midfielder"));
+    teamB.addPlayer(FootballPlayer("Brian", 22, 5, "Defender"));
+    teamB.addPlayer(FootballPlayer("Harry", 24, 7, "Midfielder"));
+    teamB.addPlayer(FootballPlayer("Edward", 25, 4, "Defender"));
+    teamB.addPlayer(FootballPlayer("Oliver", 21, 11, "Forward"));
+    teamB.addPlayer(FootballPlayer("Jason", 23, 10, "Forward"));
+
+    FootballGame game(teamA, teamB);
+
+    system("cls");
+    bool running { true };
+    while (running)
+    {
+        std::cout << "You are in the stadium.\n";
+        std::cout << "1. Watch the soccer game\n";
+        std::cout << "2. Leave the stadium\n";
+        std::cout << "Enter your choice: ";
+        char ch{};
+        std::cin >> ch;
+
+        switch (ch)
+        {
+            case '1': game.playMatch(); break;
+            case '2': running = false; break;
+            default: std::cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
+
+void Map::restaurantMenu(Player& pl)
+{
+    system("cls");
+    bool running { true };
+    while (running)
+    {
+        std::cout << "You are in the restaurant.\n";
+        std::cout << "1. Show Menu\n";
+        std::cout << "2. Take Order\n";
+        std::cout << "3. View Order Summary\n";
+        std::cout << "4. Pay and Exit\n";
+        std::cout << "5. Leave Restaurant\n";
+        std::cout << "Enter your choice: ";
+        char ch{};
+        std::cin >> ch;
+
+        switch (ch)
+        {
+            case '1': rest.showMenu(); break;
+            case '2': rest.takeOrder(); break;
+            case '3': {
+                        int total { rest.calcTotal() };
+                        std::cout << "Order Summary:\n";
+                        std::cout << "Total amount due: " << total << " coins\n";
+                      }
+                      break;
+            case '4': rest.processPayment(pl); running = false; break;
             case '5': running = false; break;
             default: std::cout << "Invalid choice. Please try again.\n";
         }

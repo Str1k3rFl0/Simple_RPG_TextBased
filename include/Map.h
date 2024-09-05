@@ -13,9 +13,11 @@
 #include "Supermarket.h"
 #include "Casino.h"
 #include "Bank.h"
+#include "Stadium.h"
+#include "Restaurant.h"
 
 enum DIRECTIONS { NORTH, WEST, SOUTH, EAST };
-enum LOCATIONS { CENTRE, BANK, SUPERMARKET, HOSPITAL, HOME, PARK, CASINO };
+enum LOCATIONS { CENTRE, BANK, SUPERMARKET, STADIUM, RESTAURANT, PARK, CASINO };
 enum VERBS { LOOK, STATS, OPTIONS, ENTER, LEAVE, NEEDMONEY, INVENTORY, CLEAR };
 
 const int NONE { -1 };
@@ -47,6 +49,7 @@ public:
     Supermarket sm{};
     Casino cas { pl.getMoney() };
     Bank bank{};
+    Restaurant rest{};
 
     bool isInsideBuilding { false };
 
@@ -64,6 +67,8 @@ public:
     void superMarketMenu(Player& pl);
     void casinoMenu(Player& pl);
     void bankMenu(Player& pl);
+    void stadiumMenu(Player& pl);
+    void restaurantMenu(Player& pl);
 
     void showInventoryCommand(Player& pl)
     {
