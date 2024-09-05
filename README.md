@@ -33,8 +33,15 @@ Version 10.0.1.3:
       + A new building, Bank. Create a card for player, deposit and withdraw money
 
 
+Version 10.0.1.4:
+  - Game:
+      + A new building, Stadium. Watch a soccer game and see who win the match.
+      + A new building, Restaurant.
+
+
 ![instructions](https://github.com/user-attachments/assets/2f64bb32-c049-4113-b81a-ab5bfe27e991)
 
 ![casinoGames](https://github.com/user-attachments/assets/10b89eb5-693b-4971-9c4b-c9b4125a1bae)
 
-![Map](https://github.com/user-attachments/assets/08abdb02-42cd-4151-81a3-13110f2fffaa)
+![Map](https://github.com/user-attachments/assets/86ac7b36-4a80-4462-9262-f0359f1e7ae9)
+
